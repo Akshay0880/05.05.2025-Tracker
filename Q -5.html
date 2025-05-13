@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RGB Color Slider</title>
+</head>
+<body>
+  <h2>RGB Color Changer</h2>
+
+  <div style="margin-bottom: 10px;">
+    <label>Hue (0–360): 
+      <input type="range" min="0" max="360" id="colorSlider" oninput="changeColor()">
+    </label>
+    <span id="hueVal">0</span>
+  </div>
+
+  <div id="colorBox" style="width:300px;height:100px;border:1px solid #000;"></div>
+  <p>RGB: <span id="rgbText">rgb(255, 0, 0)</span></p>
+
+  <script>
+    function hslToRgb(h, s, l) {
+      // Convert HSL to RGB (helper function)
+      s /= 100;
+      l /= 100;
+      const k = n => (n + h / 30) % 12;
+      const a = s * Math.min(l, 1 - l);
+      const f = n =>
+        l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+      return [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
+    }
+
+    function changeColor() {
+      const hue = document.getElementById('colorSlider').value;
+      document.getElementById('hueVal').innerText = hue;
+
+      const [r, g, b] = hslToRgb(hue, 100, 50);
+      const rgb = `rgb(${r}, ${g}, ${b})`;
+
+      document.getElementById('colorBox').style.backgroundColor = rgb;
+      document.getElementById('rgbText').innerText = rgb;
+    }
+
+    // Initialize on page load
+    window.onload = changeColor;
+  </script>
+</body>
+</html>
